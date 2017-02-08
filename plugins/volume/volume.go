@@ -7,7 +7,6 @@ package volume
 import "C"
 
 import (
-	"fmt"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -50,12 +49,13 @@ func (v Volume) StartMonitor() {
 	if err != nil {
 		panic(err)
 	}
+
+	v.out <- v.parseVolume()
 	for v.do {
 		isEvent, err := pollCtl(ctl)
 		if err != nil {
 			v.out <- err.Error()
 		} else if isEvent {
-			fmt.Println(v.parseVolume())
 			v.out <- v.parseVolume()
 		}
 	}
