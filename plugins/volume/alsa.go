@@ -6,15 +6,22 @@ package volume
 #include <stdio.h>
 */
 import "C"
+import "unsafe"
 
 import (
 	"errors"
 	"fmt"
 	"os/exec"
+	"strconv"
+	"strings"
+
+	"github.com/pltanton/yags/utils"
+	"github.com/spf13/viper"
 )
 
 func openCtl(name string) (*C.snd_ctl_t, error) {
 	deviceCString := C.CString(name)
+	defer C.free(unsafe.Pointer(deviceCString))
 	var ctl *C.snd_ctl_t
 	err := C.snd_ctl_open(&ctl, deviceCString, C.SND_CTL_READONLY)
 	if err < 0 {
@@ -36,6 +43,8 @@ func checkEvent(ctl *C.snd_ctl_t) error {
 	var event *C.snd_ctl_event_t
 
 	C.snd_ctl_event_malloc(&event)
+	defer C.free(unsafe.Pointer(event))
+
 	err := C.snd_ctl_read(ctl, event)
 	if err < 0 {
 		return errors.New("Cannot read event")
@@ -57,9 +66,29 @@ func checkEvent(ctl *C.snd_ctl_t) error {
 
 func parseVolume() {
 	// TODO: fetch volume, using native library
-	volume, _ := exec.Command("pamixer", "--get-volume").Output()
-	mute, _ := exec.Command("pamixer", "--get-mute").Output()
-	fmt.Println(string(volume), string(mute))
+	volumeStr, _ := exec.Command("pamixer", "--get-volume").Output()
+	muteStr, _ := exec.Command("pamixer", "--get-mute").Output()
+
+	volume, _ := strconv.Atoi(strings.TrimSpace(string(volumeStr)))
+	muted, _ := strconv.ParseBool(strings.TrimSpace(string(muteStr)))
+
+	// TODO: set defalut values
+	config := viper.Sub("plugins.volume")
+
+	var pattern string
+	if muted {
+		pattern = config.GetString("muted")
+	} else {
+		switch {
+		case volume > 66:
+			pattern = config.GetString("hight")
+		case volume > 33:
+			pattern = config.GetString("medium")
+		default:
+			pattern = config.GetString("low")
+		}
+	}
+	fmt.Println(utils.ReplaceVar(pattern, "vol", strconv.Itoa(volume)))
 }
 
 func Monitor() {
