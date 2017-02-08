@@ -72,7 +72,7 @@ func parseVolume() {
 	volume, _ := strconv.Atoi(strings.TrimSpace(string(volumeStr)))
 	muted, _ := strconv.ParseBool(strings.TrimSpace(string(muteStr)))
 
-	// TODO: set defalut values
+	// TODO: set default values
 	config := viper.Sub("plugins.volume")
 
 	var pattern string
@@ -81,7 +81,7 @@ func parseVolume() {
 	} else {
 		switch {
 		case volume > 66:
-			pattern = config.GetString("hight")
+			pattern = config.GetString("high")
 		case volume > 33:
 			pattern = config.GetString("medium")
 		default:
