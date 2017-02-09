@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/pltanton/yags/plugins"
+	"github.com/pltanton/yags/plugins/battery"
 	"github.com/pltanton/yags/plugins/volume"
 	"github.com/pltanton/yags/utils"
 )
@@ -26,6 +27,8 @@ func initPlugins() {
 		switch typ {
 		case "volume":
 			plugin = volume.NewVolume(name)
+		case "battery":
+			plugin = battery.NewBattery(name)
 		default:
 			continue
 		}

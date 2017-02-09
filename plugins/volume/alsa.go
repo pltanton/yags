@@ -15,7 +15,7 @@ import (
 
 func openCtl(name string) (*C.snd_ctl_t, error) {
 	deviceCString := C.CString(name)
-	//defer C.free(unsafe.Pointer(deviceCString))
+	defer C.free(unsafe.Pointer(deviceCString))
 	var ctl *C.snd_ctl_t
 	err := C.snd_ctl_open(&ctl, deviceCString, C.SND_CTL_READONLY)
 	if err < 0 {

@@ -11,8 +11,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pltanton/yags/utils"
 	"github.com/spf13/viper"
+
+	"github.com/pltanton/yags/utils"
 )
 
 func (v Volume) parseVolume() string {
