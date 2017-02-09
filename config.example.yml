@@ -5,7 +5,7 @@ format: "{volume}"
 plugins:
   volume:
     type: "volume"
-    hight: " {vol}%"
-    medium: " {vol}%"
-    low: " {vol}%"
-    muted: "^fg(#cc6666)^fg() {vol}%"
+    hight: "^fn(FontAwesome:size=9)^fn() {vol}%"
+    medium: "^fn(FontAwesome:size=9)^fn() {vol}%"
+    low: "^fn(FontAwesome:size=9)^fn() {vol}%"
+    muted: "^fn(FontAwesome:size=9)^fg(#cc6666)^fg()^fn() {vol}%"

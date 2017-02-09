@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -13,4 +14,15 @@ func ReplaceVar(s, varName, newValue string) string {
 	varSeps := viper.GetString("varSeps")
 	oldValue := fmt.Sprintf("%c%s%c", varSeps[0], varName, varSeps[1])
 	return strings.Replace(s, oldValue, newValue, -1)
+}
+
+// GetVars returns the variables containing in the stirng s
+func GetVars(s string) (result []string) {
+	seps := viper.GetString("varSeps")
+	regex := regexp.MustCompile(fmt.Sprintf(`%c([[:word:]]+)%c`, seps[0], seps[1]))
+	allSubmatches := regex.FindAllStringSubmatch(s, -1)
+	for _, submatch := range allSubmatches {
+		result = append(result, submatch[1])
+	}
+	return
 }

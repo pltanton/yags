@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/viper"
 
-	"github.com/pltanton/yags/plugins/volume"
+	"github.com/pltanton/yags/core"
 )
 
 func main() {
@@ -16,5 +16,5 @@ func main() {
 		panic(fmt.Errorf("fatal error config file: %s", err))
 	}
 
-	volume.Monitor()
+	core.Init()
 }
