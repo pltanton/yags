@@ -5,8 +5,6 @@ import (
 
 	"github.com/godbus/dbus"
 	"github.com/spf13/viper"
-
-	"github.com/pltanton/yags/utils"
 )
 
 // KBDD plugin structure
@@ -49,7 +47,7 @@ func (k KBDD) StartMonitor() {
 }
 
 func (k KBDD) sendLayout(layout uint32) {
-	k.out <- k.formatMessage(k.layoutToString(layout))
+	k.out <- k.layoutToString(layout)
 }
 
 func askForCurLayout() uint32 {
@@ -63,8 +61,4 @@ func askForCurLayout() uint32 {
 func (k KBDD) layoutToString(layout uint32) string {
 	layouts := k.conf.GetStringSlice("names")
 	return layouts[layout]
-}
-
-func (k KBDD) formatMessage(layout string) string {
-	return utils.ReplaceVar(k.conf.GetString("format"), "kbd", layout)
 }

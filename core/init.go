@@ -20,6 +20,7 @@ var cases []reflect.SelectCase
 var values map[string]string
 
 func initPlugins() {
+	values = make(map[string]string)
 	pluginsNames = utils.GetVars(viper.GetString("format"))
 	pluginsInstances = make([]plugins.Plugin, len(pluginsNames))
 
@@ -43,6 +44,9 @@ func initPlugins() {
 		pluginsInstances[i] = plugin
 
 		go plugin.StartMonitor()
+
+		// Read first value
+		values[name] = <-plugin.Chan()
 	}
 }
 
@@ -57,8 +61,6 @@ func initCases() {
 }
 
 func listen() {
-	values = make(map[string]string)
-
 	for {
 		chosen, value, _ := reflect.Select(cases)
 		values[pluginsNames[chosen]] = value.String()
@@ -67,6 +69,7 @@ func listen() {
 }
 
 func Init() {
+	setDefaults()
 	initPlugins()
 	initCases()
 	listen()

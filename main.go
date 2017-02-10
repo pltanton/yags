@@ -10,8 +10,10 @@ import (
 )
 
 func main() {
-	viper.SetConfigName(os.Args[1])
-	viper.AddConfigPath(".")
+	if len(os.Args) != 1 {
+		panic(fmt.Errorf("You should specify the config file as only one argument"))
+	}
+	viper.SetConfigFile(os.Args[1])
 	if err := viper.ReadInConfig(); err != nil {
 		panic(fmt.Errorf("fatal error config file: %s", err))
 	}

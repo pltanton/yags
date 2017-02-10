@@ -13,7 +13,7 @@ import (
 
 // Battery plugin structure
 type Battery struct {
-	name    string
+	conf    *viper.Viper
 	batName string
 	out     chan string
 }
@@ -21,13 +21,12 @@ type Battery struct {
 // NewBattery returns new instance of battery plugin by given name
 func NewBattery(name string) Battery {
 	return Battery{
-		name:    name,
-		out:     make(chan string),
-		batName: viper.GetString("plugins." + name + ".name"),
+		out:  make(chan string),
+		conf: setDefaults(viper.Sub("plugins." + name)),
 	}
 }
 
-// Returns a strings channel with battery state monitor
+// Chan returns a strings channel with battery state monitor
 func (b Battery) Chan() chan string {
 	return b.out
 }
@@ -42,7 +41,7 @@ func (b Battery) StartMonitor() {
 
 	arg := fmt.Sprintf(
 		"type='signal',path='%s',interface='%s',member='%s',sender='%s'",
-		fmt.Sprintf("/org/freedesktop/UPower/devices/battery_%s", b.batName),
+		fmt.Sprintf("/org/freedesktop/UPower/devices/battery_%s", b.conf.GetString("name")),
 		"org.freedesktop.DBus.Properties",
 		"PropertiesChanged",
 		"org.freedesktop.UPower",
@@ -65,21 +64,20 @@ func (b Battery) StartMonitor() {
 // formatMessage formats message for printing
 func (b Battery) formatMessage() string {
 	lvl, state := b.parseBatLevel()
-	config := viper.Sub("plugins." + b.name)
 
 	var pattern string
 	if state != 2 {
-		pattern = config.GetString("ac")
+		pattern = b.conf.GetString("ac")
 	} else {
 		switch {
 		case lvl > 75:
-			pattern = config.GetString("high")
+			pattern = b.conf.GetString("high")
 		case lvl > 35:
-			pattern = config.GetString("medium")
+			pattern = b.conf.GetString("medium")
 		case lvl > 12:
-			pattern = config.GetString("low")
+			pattern = b.conf.GetString("low")
 		default:
-			pattern = config.GetString("empty")
+			pattern = b.conf.GetString("empty")
 		}
 	}
 
@@ -100,7 +98,7 @@ func (b Battery) formatMessage() string {
 //
 func (b Battery) parseBatLevel() (int, uint32) {
 	conn, _ := dbus.SystemBus()
-	pth := fmt.Sprintf("/org/freedesktop/UPower/devices/battery_%s", b.batName)
+	pth := fmt.Sprintf("/org/freedesktop/UPower/devices/battery_%s", b.conf.GetString("name"))
 	object := conn.Object(
 		"org.freedesktop.UPower",
 		dbus.ObjectPath(pth),
