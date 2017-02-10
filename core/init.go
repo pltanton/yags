@@ -8,6 +8,7 @@ import (
 
 	"github.com/pltanton/yags/plugins"
 	"github.com/pltanton/yags/plugins/battery"
+	"github.com/pltanton/yags/plugins/kbdd"
 	"github.com/pltanton/yags/plugins/timer"
 	"github.com/pltanton/yags/plugins/volume"
 	"github.com/pltanton/yags/utils"
@@ -34,6 +35,8 @@ func initPlugins() {
 			plugin = timer.NewTimerCMD(name)
 		case "time":
 			plugin = timer.NewTime(name)
+		case "kbdd":
+			plugin = kbdd.NewKBDD(name)
 		default:
 			continue
 		}

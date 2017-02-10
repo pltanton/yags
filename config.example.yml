@@ -1,18 +1,18 @@
 # vim: ts=2:sw=2
 
 varSeps: "{}"
-format: "{volume} {bat1} {time} "
+format: "{volume} {bat1} {time} {layout} "
 plugins:
   volume:
     type: "volume"
-    hight: "^fn(FontAwesome:size=9)^fn() {vol}%"
+    high: "^fn(FontAwesome:size=9)^fn() {vol}%"
     medium: "^fn(FontAwesome:size=9)^fn() {vol}%"
     low: "^fn(FontAwesome:size=9)^fn() {vol}%"
     muted: "^fn(FontAwesome:size=9)^fg(#cc6666)^fg()^fn() {vol}%"
   bat1:
     type: "battery"
     name: "BAT1"
-    hight: "^fn(FontAwesome:size=9)^fn() {lvl}%"
+    high: "^fn(FontAwesome:size=9)^fn() {lvl}%"
     medium: "^fn(FontAwesome:size=9)^fn() {lvl}%"
     low: "^fn(FontAwesome:size=9)^fn() {lvl}%"
     empty: "^fn(FontAwesome:size=9)^fn() {lvl}%"
@@ -22,3 +22,7 @@ plugins:
     format: "{cmd}"
     timeFormat: "Jan 2 15:04:05"
     pause: 1000
+  layout:
+    type: "kbdd"
+    format: "{kbd}"
+    names: ["en", "ru"]

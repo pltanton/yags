@@ -73,7 +73,7 @@ func (b Battery) formatMessage() string {
 	} else {
 		switch {
 		case lvl > 75:
-			pattern = config.GetString("hight")
+			pattern = config.GetString("high")
 		case lvl > 35:
 			pattern = config.GetString("medium")
 		case lvl > 12:

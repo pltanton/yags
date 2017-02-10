@@ -33,7 +33,7 @@ func (v Volume) parseVolume() string {
 	} else {
 		switch {
 		case volume > 66:
-			pattern = config.GetString("hight")
+			pattern = config.GetString("high")
 		case volume > 33:
 			pattern = config.GetString("medium")
 		default:
