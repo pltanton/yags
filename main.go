@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 1 {
+	if len(os.Args) != 2 {
 		panic(fmt.Errorf("You should specify the config file as only one argument"))
 	}
 	viper.SetConfigFile(os.Args[1])

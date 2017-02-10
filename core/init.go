@@ -44,9 +44,6 @@ func initPlugins() {
 		pluginsInstances[i] = plugin
 
 		go plugin.StartMonitor()
-
-		// Read first value
-		values[name] = <-plugin.Chan()
 	}
 }
 
