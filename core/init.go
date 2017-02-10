@@ -32,6 +32,8 @@ func initPlugins() {
 			plugin = battery.NewBattery(name)
 		case "timer":
 			plugin = timer.NewTimerCMD(name)
+		case "time":
+			plugin = timer.NewTime(name)
 		default:
 			continue
 		}

@@ -52,7 +52,7 @@ func (v Volume) StartMonitor() {
 	}
 
 	v.out <- v.parseVolume()
-	for v.do {
+	for {
 		isEvent, err := pollCtl(ctl)
 		if err != nil {
 			v.out <- err.Error()
@@ -64,12 +64,7 @@ func (v Volume) StartMonitor() {
 
 type Volume struct {
 	name string
-	do   bool
 	out  chan string
-}
-
-func (v Volume) StopMonitor() {
-	v.do = false
 }
 
 func (v Volume) Chan() chan string {
@@ -80,7 +75,6 @@ func (v Volume) Chan() chan string {
 func NewVolume(name string) Volume {
 	return Volume{
 		name: name,
-		do:   true,
 		out:  make(chan string),
 	}
 }

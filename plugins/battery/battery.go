@@ -13,7 +13,6 @@ import (
 
 // Battery plugin structure
 type Battery struct {
-	do      bool
 	name    string
 	batName string
 	out     chan string
@@ -22,7 +21,6 @@ type Battery struct {
 // NewBattery returns new instance of battery plugin by given name
 func NewBattery(name string) Battery {
 	return Battery{
-		do:      true,
 		name:    name,
 		out:     make(chan string),
 		batName: viper.GetString("plugins." + name + ".name"),
@@ -32,11 +30,6 @@ func NewBattery(name string) Battery {
 // Returns a strings channel with battery state monitor
 func (b Battery) Chan() chan string {
 	return b.out
-}
-
-// StopMonitor would harmful stops monitoring in the future, may be
-func (b Battery) StopMonitor() {
-	b.do = false
 }
 
 // StartMonitor starts monitoring for battery changing events
@@ -63,7 +56,7 @@ func (b Battery) StartMonitor() {
 
 	c := make(chan *dbus.Signal)
 	conn.Signal(c)
-	for b.do {
+	for {
 		<-c
 		b.out <- b.formatMessage()
 	}

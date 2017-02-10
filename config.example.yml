@@ -18,7 +18,7 @@ plugins:
     empty: "^fn(FontAwesome:size=9)^fn() {lvl}%"
     ac: "^fn(FontAwesome:size=9)^fn() {lvl}%"
   time:
+    type: "time"
     format: "{cmd}"
-    type: "timer"
-    cmd: "date"
+    timeFormat: "Jan 2 15:04:05"
     pause: 1000
