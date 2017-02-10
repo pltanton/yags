@@ -1,7 +1,7 @@
 # vim: ts=2:sw=2
 
 varSeps: "{}"
-format: "{volume} {bat1} "
+format: "{volume} {bat1} {time} "
 plugins:
   volume:
     type: "volume"
@@ -17,3 +17,8 @@ plugins:
     low: "^fn(FontAwesome:size=9)^fn() {lvl}%"
     empty: "^fn(FontAwesome:size=9)^fn() {lvl}%"
     ac: "^fn(FontAwesome:size=9)^fn() {lvl}%"
+  time:
+    format: "{cmd}"
+    type: "timer"
+    cmd: "date"
+    pause: 1000

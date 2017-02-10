@@ -8,6 +8,7 @@ import (
 
 	"github.com/pltanton/yags/plugins"
 	"github.com/pltanton/yags/plugins/battery"
+	"github.com/pltanton/yags/plugins/timer"
 	"github.com/pltanton/yags/plugins/volume"
 	"github.com/pltanton/yags/utils"
 )
@@ -29,6 +30,8 @@ func initPlugins() {
 			plugin = volume.NewVolume(name)
 		case "battery":
 			plugin = battery.NewBattery(name)
+		case "timer":
+			plugin = timer.NewTimerCMD(name)
 		default:
 			continue
 		}
