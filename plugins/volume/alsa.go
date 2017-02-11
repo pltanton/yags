@@ -37,7 +37,7 @@ func checkEvent(ctl *C.snd_ctl_t) (bool, error) {
 	var event *C.snd_ctl_event_t
 
 	C.snd_ctl_event_malloc(&event)
-	defer C.free(unsafe.Pointer(event))
+	defer C.snd_ctl_event_free(event)
 
 	err := C.snd_ctl_read(ctl, event)
 	if err < 0 {
