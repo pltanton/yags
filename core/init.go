@@ -36,6 +36,8 @@ func initPlugins() {
 			plugin = timer.NewTimerCMD(name)
 		case "time":
 			plugin = timer.NewTime(name)
+		case "wifi":
+			plugin = timer.NewWifi(name)
 		case "kbdd":
 			plugin = kbdd.NewKBDD(name)
 		default:
