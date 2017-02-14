@@ -33,6 +33,10 @@ func openCtl(name string) (*C.snd_ctl_t, error) {
 	return ctl, nil
 }
 
+func closeCtl(ctl *C.snd_ctl_t) {
+	C.snd_ctl_close(ctl)
+}
+
 func checkEvent(ctl *C.snd_ctl_t) (bool, error) {
 	var event *C.snd_ctl_event_t
 
