@@ -18,8 +18,6 @@ func (v Volume) parseVolume() string {
 	volume, _ := strconv.Atoi(strings.TrimSpace(string(volumeStr)))
 	muted, _ := strconv.ParseBool(strings.TrimSpace(string(muteStr)))
 
-	muted := false
-
 	var pattern string
 	if muted {
 		pattern = v.conf.GetString("muted")

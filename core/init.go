@@ -9,6 +9,7 @@ import (
 	"github.com/pltanton/yags/plugins"
 	"github.com/pltanton/yags/plugins/battery"
 	"github.com/pltanton/yags/plugins/kbdd"
+	"github.com/pltanton/yags/plugins/stdin"
 	"github.com/pltanton/yags/plugins/timer"
 	"github.com/pltanton/yags/plugins/volume"
 	"github.com/pltanton/yags/utils"
@@ -25,24 +26,29 @@ func initPlugins() {
 	pluginsInstances = make([]plugins.Plugin, len(pluginsNames))
 
 	for i, name := range pluginsNames {
-		typ := viper.GetString("plugins." + name + ".type")
 		var plugin plugins.Plugin
-		switch typ {
-		case "volume":
-			plugin = volume.NewVolume(name)
-		case "battery":
-			plugin = battery.NewBattery(name)
-		case "timer":
-			plugin = timer.NewTimerCMD(name)
-		case "time":
-			plugin = timer.NewTime(name)
-		case "wifi":
-			plugin = timer.NewWifi(name)
-		case "kbdd":
-			plugin = kbdd.NewKBDD(name)
-		default:
-			continue
+		if name == "stdin" {
+			plugin = stdin.NewStdin()
+		} else {
+			typ := viper.GetString("plugins." + name + ".type")
+			switch typ {
+			case "volume":
+				plugin = volume.NewVolume(name)
+			case "battery":
+				plugin = battery.NewBattery(name)
+			case "timer":
+				plugin = timer.NewTimerCMD(name)
+			case "time":
+				plugin = timer.NewTime(name)
+			case "wifi":
+				plugin = timer.NewWifi(name)
+			case "kbdd":
+				plugin = kbdd.NewKBDD(name)
+			default:
+				continue
+			}
 		}
+
 		pluginsInstances[i] = plugin
 
 		go plugin.StartMonitor()

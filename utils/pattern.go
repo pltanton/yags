@@ -26,3 +26,13 @@ func GetVars(s string) (result []string) {
 	}
 	return
 }
+
+// Contains return true if key is inside slice
+func Contains(key string, arr *[]string) bool {
+	for _, val := range *arr {
+		if key == val {
+			return true
+		}
+	}
+	return false
+}

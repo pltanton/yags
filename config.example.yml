@@ -5,18 +5,18 @@ format: "{volume} {wifi} {bat1} {time} {layout} "
 plugins:
   volume:
     type: "volume"
-    high: "^fn(FontAwesome:size=9)^fn() {vol}%"
-    medium: "^fn(FontAwesome:size=9)^fn() {vol}%"
-    low: "^fn(FontAwesome:size=9)^fn() {vol}%"
-    muted: "^fn(FontAwesome:size=9)^fg(#cc6666)^fg()^fn() {vol}%"
+    high: " {vol}%"
+    medium: " {vol}%"
+    low: " {vol}%"
+    muted: " {vol}%"
   bat1:
     type: "battery"
     name: "BAT1"
-    high: "^fn(FontAwesome:size=9)^fn() {lvl}%"
-    medium: "^fn(FontAwesome:size=9)^fn() {lvl}%"
-    low: "^fn(FontAwesome:size=9)^fn() {lvl}%"
-    empty: "^fn(FontAwesome:size=9)^fn() {lvl}%"
-    ac: "^fn(FontAwesome:size=9)^fn() {lvl}%"
+    high: " {lvl}%"
+    medium: " {lvl}%"
+    low: " {lvl}%"
+    empty: " {lvl}%"
+    ac: " {lvl}%"
   time:
     type: "time"
     # timeFormat: "Jan 2 15:04:05" # default
@@ -26,7 +26,7 @@ plugins:
     names: ["en", "ru"]
   wifi:
     type: "wifi"
-    connected: "^fn(FontAwesome:size=9)^fn() {lvl}%"
-    disconnected: "^fn(FontAwesome:size=9)^fn() N/A"
+    connected: " {lvl}%"
+    disconnected: " N/A"
     interface: "wlp4s0"
     pause: 2000
