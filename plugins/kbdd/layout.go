@@ -16,7 +16,7 @@ type KBDD struct {
 // NewKBDD returns new instance of battery plugin by given name
 func NewKBDD(name string) KBDD {
 	return KBDD{
-		out:  make(chan string),
+		out:  make(chan string, 1),
 		conf: viper.Sub("plugins." + name),
 	}
 }
@@ -39,7 +39,7 @@ func (k KBDD) StartMonitor() {
 	)
 
 	k.sendLayout(askForCurLayout())
-	c := make(chan *dbus.Signal)
+	c := make(chan *dbus.Signal, 1)
 	conn.Signal(c)
 	for v := range c {
 		k.sendLayout(v.Body[0].(uint32))

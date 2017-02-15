@@ -49,7 +49,7 @@ func NewTimerCMD(name string) Timer {
 // NewTimerFunc creates timer plugin with given function
 func NewTimerFunc(name string, task Producer) Timer {
 	return Timer{
-		out:  make(chan string),
+		out:  make(chan string, 1),
 		task: task,
 		conf: viper.Sub("plugins." + name),
 	}

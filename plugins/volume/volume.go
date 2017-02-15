@@ -64,7 +64,7 @@ func (v Volume) Chan() chan string {
 
 func NewVolume(name string) Volume {
 	return Volume{
-		out:  make(chan string),
+		out:  make(chan string, 1),
 		conf: setDefaults(viper.Sub("plugins." + name)),
 	}
 }

@@ -21,7 +21,7 @@ type Battery struct {
 // NewBattery returns new instance of battery plugin by given name
 func NewBattery(name string) Battery {
 	return Battery{
-		out:  make(chan string),
+		out:  make(chan string, 1),
 		conf: setDefaults(viper.Sub("plugins." + name)),
 	}
 }
@@ -53,7 +53,7 @@ func (b Battery) StartMonitor() {
 		arg,
 	)
 
-	c := make(chan *dbus.Signal)
+	c := make(chan *dbus.Signal, 1)
 	conn.Signal(c)
 	for {
 		<-c

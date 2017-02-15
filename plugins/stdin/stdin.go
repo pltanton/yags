@@ -25,7 +25,7 @@ func NewStdin() Stdin {
 	created = true
 	return Stdin{
 		scanner: bufio.NewScanner(os.Stdin),
-		out:     make(chan string),
+		out:     make(chan string, 1),
 	}
 }
 
