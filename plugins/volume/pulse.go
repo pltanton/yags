@@ -1,7 +1,6 @@
 package volume
 
 import (
-	"fmt"
 	"github.com/godbus/dbus"
 	"github.com/sqp/pulseaudio"
 )
