@@ -1,6 +1,7 @@
 package volume
 
 import (
+	"fmt"
 	"github.com/godbus/dbus"
 	"github.com/sqp/pulseaudio"
 )
@@ -14,7 +15,7 @@ func (pc *pulseClient) DeviceVolumeUpdated(path dbus.ObjectPath, values []uint32
 	pc.event <- true
 }
 
-func (pc *pulseClient) DeviceMuteUpdated(path dbus.ObjectPath, values []uint32) {
+func (pc *pulseClient) DeviceMuteUpdated(path dbus.ObjectPath, values bool) {
 	pc.event <- true
 }
 
