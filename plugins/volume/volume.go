@@ -1,23 +1,14 @@
 package volume
 
 import (
-	"os/exec"
 	"strconv"
-	"strings"
 
 	"github.com/spf13/viper"
 
 	"github.com/pltanton/yags/utils"
 )
 
-func (v Volume) parseVolume() string {
-
-	volumeStr, _ := exec.Command("pamixer", "--get-volume").Output()
-	muteStr, _ := exec.Command("pamixer", "--get-mute").Output()
-
-	volume, _ := strconv.Atoi(strings.TrimSpace(string(volumeStr)))
-	muted, _ := strconv.ParseBool(strings.TrimSpace(string(muteStr)))
-
+func (v Volume) formatVolume(volume int, muted bool) string {
 	var pattern string
 	if muted {
 		pattern = v.conf.GetString("muted")
@@ -36,20 +27,11 @@ func (v Volume) parseVolume() string {
 }
 
 func (v Volume) StartMonitor() {
-	ctl, err := openCtl("hw:0")
-	defer closeCtl(ctl)
-	if err != nil {
-		panic(err)
-	}
+	client := newPulseClient()
 
-	v.out <- v.parseVolume()
-	for {
-		isEvent, err := pollCtl(ctl)
-		if err != nil {
-			v.out <- err.Error()
-		} else if isEvent {
-			v.out <- v.parseVolume()
-		}
+	v.out <- v.formatVolume(client.getVolume(v.conf.GetString("sink")))
+	for range client.event {
+		v.out <- v.formatVolume(client.getVolume(v.conf.GetString("sink")))
 	}
 }
 

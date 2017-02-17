@@ -4,6 +4,7 @@
 format: "{volume} {wifi} {bat1} {time} {layout} "
 plugins:
   volume:
+    sink: "/org/pulseaudio/core1/sink0"
     type: "volume"
     high: " {vol}%"
     medium: " {vol}%"
