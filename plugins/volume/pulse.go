@@ -23,7 +23,7 @@ func (pc *pulseClient) getVolume(sink string) (vol int, mute bool) {
 
 	mute, _ = dev.Bool("Mute")
 	vols, _ := dev.ListUint32("Volume")
-	vol = int(volAvg(vols) * 100 / 65535)
+	vol = int(float64(volAvg(vols)*100)/65535. + .5)
 
 	return
 }
