@@ -33,10 +33,11 @@ are several implemented plugins:
 - [x] kbdd -- uses `kbdd` daemon to watch for keyboard layout
 - [x] timer -- conky like plugin to execute any shell command with pause
 - [x] time -- alias for timer, but uses Go library to display current date/time
+- [x] maildir -- monitors maildir changing for new mails
 - [x] volume -- uses alsalib to monitor volume changing and `pamixer` program
   to fetch an volume and a mute state, would be overwritten with pulselib in
   future
-- [ ] network -- monitors network without networkmanager
+- [x] network -- monitors network without networkmanager
 - [ ] cpu -- alias for timer for cpu monitoring
 - [ ] ram -- alias for timer for ram monitoring
 
