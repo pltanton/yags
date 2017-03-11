@@ -60,30 +60,56 @@ At the root of configuration file it few basic configuration fields:
 | format  | string which would be formatted, you should use wrapped plugins names by `varSeps` to display plugin's output. Only if plugin passed to `format` it would be triggered. |               |
 | plugins | subtree of configuration, where each plugin should be described                                                                                                         |               |
 
-### battery
+### Plugins
+
+Each plugin in `plugin` section should contain `type` key to specifi plugin
+type.
+
+Some plugin has variables for interpolation and own formats. It acts just lkie
+global `format`, but locally for plugin. You should first specify format for
+plugin to insert it final output.
+
+Available plugin types:
+
+#### battery
+
+Available configuration keys:
+
+| Key    | Description                 | Default value |
+| ---    | ---                         | ---           |
+| name   | UPower name of battery      | BAT0          |
+| high   | format for lvl > 75         | {lvl}         |
+| medium | format for lvl > 35         | {lvl}         |
+| low    | format for lvl > 12         | {lvl}         |
+| empty  | format for lvl <= 12        | {lvl}         |
+| ac     | format for conneted adapted | {lvl}         |
+
+Available variables for interpolation
+
+| Variable name | Description               |
+| ---           | ---                       |
+| lvl           | battery level in precents |
+
+#### kbdd
 
 TBD
 
-### kbdd
+#### timer
 
 TBD
 
-### timer
+#### time
 
 TBD
 
-### time
+#### maildir
 
 TBD
 
-### maildir
+#### volume
 
 TBD
 
-### volume
-
-TBD
-
-### network
+#### network
 
 TBD
