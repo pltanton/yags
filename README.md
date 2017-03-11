@@ -33,7 +33,7 @@ are several implemented plugins:
 - [x] kbdd -- uses `kbdd` daemon to watch for keyboard layout
 - [x] timer -- conky like plugin to execute any shell command with pause
 - [x] time -- alias for timer, but uses Go library to display current date/time
-- [x] maildir -- monitors maildir changing for new mails
+- [x] maildir -- monitors _new_ maildir dirrectory changing for new mails
 - [x] volume -- uses alsalib to monitor volume changing and `pamixer` program
   to fetch an volume and a mute state, would be overwritten with pulselib in
   future
@@ -66,25 +66,26 @@ Each plugin in `plugin` section should contain `type` key to specifi plugin
 type.
 
 Some plugin has variables for interpolation and own formats. It acts just lkie
-global `format`, but locally for plugin. You should first specify format for
-plugin to insert it final output.
+global `format`, but locally for plugin.
 
 Available plugin types:
 
 #### battery
+
+Displays battery level.
 
 Available configuration keys:
 
 | Key    | Description                 | Default value |
 | ---    | ---                         | ---           |
 | name   | UPower name of battery      | BAT0          |
-| high   | format for lvl > 75         | {lvl}         |
-| medium | format for lvl > 35         | {lvl}         |
-| low    | format for lvl > 12         | {lvl}         |
-| empty  | format for lvl <= 12        | {lvl}         |
+| high   | format for _lvl_ > 75       | {lvl}         |
+| medium | format for _lvl_ > 35       | {lvl}         |
+| low    | format for _lvl_ > 12       | {lvl}         |
+| empty  | format for _lvl_ <= 12      | {lvl}         |
 | ac     | format for conneted adapted | {lvl}         |
 
-Available variables for interpolation
+Available variables for interpolation:
 
 | Variable name | Description               |
 | ---           | ---                       |
@@ -92,24 +93,86 @@ Available variables for interpolation
 
 #### kbdd
 
-TBD
+Displays current keyboard layout, using kbdd.
 
-#### timer
+Available configuration keys:
 
-TBD
+| Key   | Description                                                  | Default value |
+| ---   | ---                                                          | ---           |
+| names | array with layout names (aliaces) in same order as in xinput |               |
+
+#### cmd
+
+Executes a given commanb with `pause` interval.
+
+Available configuration keys:
+
+| Key   | Description                                | Default value |
+| ---   | ---                                        | ---           |
+| pause | interval between command would be executed |               |
+| cmd   | command to execute                         |               |
 
 #### time
 
-TBD
+Displays time.
+
+Available configuration keys:
+
+| Key        | Description                  | Default value  |
+| ---        | ---                          | ---            |
+| pause      | interval between time update |                |
+| timeFormat | format of time in go style   | Jan 2 15:04:05 |
 
 #### maildir
 
-TBD
+| Key    | Description                         | Default value |
+| ---    | ---                                 | ---           |
+| dir    | path to maildir                     |               |
+| empty  | format for 0 new messageds          | {new}         |
+| filled | format for not empty new dirrectory | {new}         |
+
+Available variables for interpolation:
+
+| Variable name | Description                    |
+| ---           | ---                            |
+| new           | number of new mails in maildir |
 
 #### volume
 
-TBD
+Displays current pulse volue, using pulselib.
 
-#### network
+Available configuration keys:
 
-TBD
+| Key    | Description            | Default value               |
+| ---    | ---                    | ---                         |
+| sink   | sink to monitor        | /org/pulseaudio/core1/sink0 |
+| high   | format for _vol_ > 66  | {vol}                       |
+| medium | format for _vol_ > 33  | {vol}                       |
+| low    | format for _vol_ <= 33 | {vol}                       |
+| muted  | format for muted sink  | {vol}                       |
+
+Available variables for interpolation:
+
+| Variable name | Description                      |
+| ---           | ---                              |
+| vol           | current volume level in percents |
+
+#### wifi
+
+Displays WiFi signal level.
+
+Available configuration keys:
+
+| Key          | Description                   | Default value |
+| ---          | ---                           | ---           |
+| connected    | format for connected state    | {lvl}         |
+| disconnected | format for disconnected state | N/A           |
+| interface    | interface to monitor          | wlan0         |
+| pause        | interval between updates      | 2000          |
+
+Available variables for interpolation:
+
+| Variable name | Description  |
+| ---           | ---          |
+| lvl           | signal level |
+
