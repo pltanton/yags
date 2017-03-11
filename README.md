@@ -54,14 +54,11 @@ repository.
 
 At the root of configuration file it few basic configuration fields:
 
-| Key     | Description                                              | Default value |
-| ------- | :------------------------------------------------------: | ------------- |
-| varSeps | symbols pair to wrap variables                           | {}            |
-| format  | string which would be formatted, you should use wrapped\ |               |
-|         | plugins names by `varSeps` to display plugin's output.\  |               |
-|         | Only if plugin passed to `format` it would be triggered. |               |
-| plugins | subtree of configuration, where each plugin should be\   |               |
-|         | described                                                |               |
+| Key     | Description                                                                                                                                                             | Default value |
+| ---     | ---                                                                                                                                                                     | ---           |
+| varSeps | symbols pair to wrap variables                                                                                                                                          | {}            |
+| format  | string which would be formatted, you should use wrapped plugins names by `varSeps` to display plugin's output. Only if plugin passed to `format` it would be triggered. |               |
+| plugins | subtree of configuration, where each plugin should be described                                                                                                         |               |
 
 ### battery
 
