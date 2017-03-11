@@ -43,4 +43,50 @@ are several implemented plugins:
 
 ## Configuration
 
+You can configure `yags` by an any configuration file format, which
+[viper](eat, multi-panel tabbed file manager for Linux desktops. Developed to provide a stable, efficient and highly customizable file manager, some of its features include: in-built VFS, HAL-based device manager, customizable menu system and bash integration.)
+supports and pass configuration file path as a first argument to `yags`
+command.
+
+Exapmle of configuration you can find in root of this repository or in my
+[dotfiles](https://github.com/pltanton/dotfiles/tree/master/config/yags)
+repository.
+
+At the root of configuration file it few basic configuration fields:
+
+| Key     | Description                                              | Default value |
+| ------- | :------------------------------------------------------: | ------------- |
+| varSeps | symbols pair to wrap variables                           | {}            |
+| format  | string which would be formatted, you should use wrapped\ |               |
+|         | plugins names by `varSeps` to display plugin's output.\  |               |
+|         | Only if plugin passed to `format` it would be triggered. |               |
+| plugins | subtree of configuration, where each plugin should be\   |               |
+|         | described                                                |               |
+
+### battery
+
+TBD
+
+### kbdd
+
+TBD
+
+### timer
+
+TBD
+
+### time
+
+TBD
+
+### maildir
+
+TBD
+
+### volume
+
+TBD
+
+### network
+
 TBD
