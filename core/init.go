@@ -9,6 +9,7 @@ import (
 	"github.com/pltanton/yags/plugins"
 	"github.com/pltanton/yags/plugins/battery"
 	"github.com/pltanton/yags/plugins/kbdd"
+	"github.com/pltanton/yags/plugins/maildir"
 	"github.com/pltanton/yags/plugins/stdin"
 	"github.com/pltanton/yags/plugins/timer"
 	"github.com/pltanton/yags/plugins/volume"
@@ -44,6 +45,8 @@ func initPlugins() {
 				plugin = timer.NewWifi(name)
 			case "kbdd":
 				plugin = kbdd.NewKBDD(name)
+			case "maildir":
+				plugin = maildir.NewMaildir(name)
 			default:
 				continue
 			}
