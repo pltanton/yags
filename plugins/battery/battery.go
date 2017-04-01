@@ -53,10 +53,18 @@ func (b Battery) StartMonitor() {
 		arg,
 	)
 
+	// Init channel to listen system resume
+	resumeChan := make(chan *dbus.Signal, 1)
+	utils.GetResumeDbusConn().Signal(resumeChan)
+
 	c := make(chan *dbus.Signal, 1)
 	conn.Signal(c)
 	for {
-		<-c
+		select {
+		case <-c:
+		case <-resumeChan:
+		}
+
 		b.out <- b.formatMessage()
 	}
 }
