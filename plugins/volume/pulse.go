@@ -1,4 +1,4 @@
-package volume
+package main
 
 import (
 	"github.com/godbus/dbus"

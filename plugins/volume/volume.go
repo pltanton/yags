@@ -1,14 +1,15 @@
-package volume
+package main
 
 import (
 	"strconv"
 
 	"github.com/spf13/viper"
 
+	"github.com/pltanton/yags/plugins"
 	"github.com/pltanton/yags/utils"
 )
 
-func (v Volume) formatVolume(volume int, muted bool) string {
+func (v volume) formatVolume(volume int, muted bool) string {
 	var pattern string
 	if muted {
 		pattern = v.conf.GetString("muted")
@@ -26,7 +27,7 @@ func (v Volume) formatVolume(volume int, muted bool) string {
 	return utils.ReplaceVar(pattern, "vol", strconv.Itoa(volume))
 }
 
-func (v Volume) StartMonitor() {
+func (v volume) StartMonitor() {
 	client := newPulseClient()
 
 	v.out <- v.formatVolume(client.getVolume(v.conf.GetString("sink")))
@@ -35,18 +36,18 @@ func (v Volume) StartMonitor() {
 	}
 }
 
-type Volume struct {
+type volume struct {
 	conf *viper.Viper
 	out  chan string
 }
 
-func (v Volume) Chan() chan string {
+func (v volume) Chan() chan string {
 	return v.out
 }
 
-func NewVolume(name string) Volume {
-	return Volume{
+func New(conf *viper.Viper) plugins.Plugin {
+	return volume{
 		out:  make(chan string, 1),
-		conf: setDefaults(viper.Sub("plugins." + name)),
+		conf: conf,
 	}
 }

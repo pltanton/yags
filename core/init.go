@@ -2,18 +2,14 @@ package core
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+	"plugin"
 	"reflect"
 
-	"github.com/spf13/viper"
-
 	"github.com/pltanton/yags/plugins"
-	"github.com/pltanton/yags/plugins/battery"
-	"github.com/pltanton/yags/plugins/kbdd"
-	"github.com/pltanton/yags/plugins/maildir"
-	"github.com/pltanton/yags/plugins/stdin"
-	"github.com/pltanton/yags/plugins/timer"
-	"github.com/pltanton/yags/plugins/volume"
 	"github.com/pltanton/yags/utils"
+	"github.com/spf13/viper"
 )
 
 var pluginsNames []string
@@ -27,34 +23,29 @@ func initPlugins() {
 	pluginsInstances = make([]plugins.Plugin, len(pluginsNames))
 
 	for i, name := range pluginsNames {
-		var plugin plugins.Plugin
-		if name == "stdin" {
-			plugin = stdin.NewStdin()
-		} else {
-			typ := viper.GetString("plugins." + name + ".type")
-			switch typ {
-			case "volume":
-				plugin = volume.NewVolume(name)
-			case "battery":
-				plugin = battery.NewBattery(name)
-			case "timer":
-				plugin = timer.NewTimerCMD(name)
-			case "time":
-				plugin = timer.NewTime(name)
-			case "wifi":
-				plugin = timer.NewWifi(name)
-			case "kbdd":
-				plugin = kbdd.NewKBDD(name)
-			case "maildir":
-				plugin = maildir.NewMaildir(name)
-			default:
-				continue
-			}
+		path := viper.GetString("plugins." + name + ".path")
+		path, _ = filepath.Abs(os.ExpandEnv(path))
+
+		p, err := plugin.Open(path)
+		if err != nil {
+			panic(err)
 		}
 
-		pluginsInstances[i] = plugin
+		fmt.Println("here")
 
-		go plugin.StartMonitor()
+		pluginNewSym, err := p.Lookup("New")
+		if err != nil {
+			panic(err)
+		}
+
+		pluginNew := pluginNewSym.(func(conf *viper.Viper) plugins.Plugin)
+
+		pluginConfig := viper.Sub("plugins." + name)
+		pluginInstance := pluginNew(pluginConfig)
+
+		pluginsInstances[i] = pluginInstance
+
+		go pluginInstance.StartMonitor()
 	}
 }
 
