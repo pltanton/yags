@@ -1,4 +1,4 @@
-package maildir
+package main
 
 import (
 	"io/ioutil"
@@ -9,31 +9,32 @@ import (
 	"github.com/howeyc/fsnotify"
 	"github.com/spf13/viper"
 
+	"github.com/pltanton/yags/plugins"
 	"github.com/pltanton/yags/utils"
 )
 
-// Maildir plugin structure
-type Maildir struct {
+// maildir plugin structure
+type maildir struct {
 	conf    *viper.Viper
 	batName string
 	out     chan string
 }
 
-// NewMaildir returns new instance of maildir plugin by given name
-func NewMaildir(name string) Maildir {
-	return Maildir{
+// New returns new instance of maildir plugin by given name
+func New(conf *viper.Viper) plugins.Plugin {
+	return maildir{
 		out:  make(chan string, 1),
-		conf: viper.Sub("plugins." + name),
+		conf: conf,
 	}
 }
 
 // Chan returns a strings channel with maildir changing
-func (m Maildir) Chan() chan string {
+func (m maildir) Chan() chan string {
 	return m.out
 }
 
 // StartMonitor starts monitoring for battery changing events
-func (m Maildir) StartMonitor() {
+func (m maildir) StartMonitor() {
 	m.out <- m.formatMessage()
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -57,7 +58,7 @@ func (m Maildir) StartMonitor() {
 }
 
 // formatMessage formats message for printing
-func (m Maildir) formatMessage() string {
+func (m maildir) formatMessage() string {
 	dir := m.conf.GetString("dir")
 	files, err := ioutil.ReadDir(filepath.Join(dir, "new"))
 	if err != nil {

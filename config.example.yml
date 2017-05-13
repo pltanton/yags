@@ -1,7 +1,7 @@
 # vim: ts=2:sw=2
 
 # varSeps: "{}" # default
-format: "{volume} wifi {bat1} time {layout} gmail"
+format: "{volume} wifi {bat1} time {layout} {gmail}"
 plugins:
   volume:
     path: "$GOPATH/src/github.com/pltanton/yags/plugins/volume/volume.so"
@@ -31,8 +31,8 @@ plugins:
     #disconnected: " N/A"
     #interface: "wlp4s0"
     #pause: 2000
-  #gmail:
-    #type: "maildir"
-    #dir: "/home/anton/mail/gmail/INBOX/"
-    #empty: " {new}"
-    #filled: " {new}"
+  gmail:
+    path: "$GOPATH/src/github.com/pltanton/yags/plugins/maildir/maildir.so"
+    dir: "/home/anton/mail/gmail/INBOX/"
+    empty: " {new}"
+    filled: " {new}"
