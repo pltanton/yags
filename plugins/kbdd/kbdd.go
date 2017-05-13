@@ -1,31 +1,33 @@
-package kbdd
+package main
 
 import (
 	"fmt"
 
 	"github.com/godbus/dbus"
 	"github.com/spf13/viper"
+
+	"github.com/pltanton/yags/plugins"
 )
 
-// KBDD plugin structure
-type KBDD struct {
+// kbdd plugin structure
+type kbdd struct {
 	conf *viper.Viper
 	out  chan string
 }
 
-// NewKBDD returns new instance of battery plugin by given name
-func NewKBDD(name string) KBDD {
-	return KBDD{
+// New returns new instance of battery plugin by given name
+func New(conf *viper.Viper) plugins.Plugin {
+	return kbdd{
 		out:  make(chan string, 1),
-		conf: viper.Sub("plugins." + name),
+		conf: conf,
 	}
 }
 
 // Chan returns a strings channel with layout state monitor
-func (k KBDD) Chan() chan string { return k.out }
+func (k kbdd) Chan() chan string { return k.out }
 
 // StartMonitor starts monitoring for battery changing events
-func (k KBDD) StartMonitor() {
+func (k kbdd) StartMonitor() {
 	conn, err := dbus.SessionBus()
 	if err != nil {
 		panic(fmt.Errorf("cannot connect dbus session: %s", err.Error()))
@@ -46,7 +48,7 @@ func (k KBDD) StartMonitor() {
 	}
 }
 
-func (k KBDD) sendLayout(layout uint32) {
+func (k kbdd) sendLayout(layout uint32) {
 	k.out <- k.layoutToString(layout)
 }
 
@@ -58,7 +60,7 @@ func askForCurLayout() uint32 {
 	return layout
 }
 
-func (k KBDD) layoutToString(layout uint32) string {
+func (k kbdd) layoutToString(layout uint32) string {
 	layouts := k.conf.GetStringSlice("names")
 	return layouts[layout]
 }

@@ -1,7 +1,7 @@
 # vim: ts=2:sw=2
 
 # varSeps: "{}" # default
-format: "{volume} wifi {bat1} time layout gmail"
+format: "{volume} wifi {bat1} time {layout} gmail"
 plugins:
   volume:
     path: "$GOPATH/src/github.com/pltanton/yags/plugins/volume/volume.so"
@@ -22,9 +22,9 @@ plugins:
     #type: "time"
     ## timeFormat: "Jan 2 15:04:05" # default
     ## pause: 1000 # default
-  #layout:
-    #type: "kbdd"
-    #names: ["en", "ru"]
+  layout:
+    path: "$GOPATH/src/github.com/pltanton/yags/plugins/kbdd/kbdd.so"
+    names: ["en", "ru"]
   #wifi:
     #type: "wifi"
     #connected: " {lvl}%"
