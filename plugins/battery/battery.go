@@ -1,4 +1,4 @@
-package battery
+package main
 
 import (
 	"fmt"
@@ -8,31 +8,31 @@ import (
 
 	"github.com/spf13/viper"
 
+	"github.com/pltanton/yags/plugins"
 	"github.com/pltanton/yags/utils"
 )
 
-// Battery plugin structure
-type Battery struct {
+type battery struct {
 	conf    *viper.Viper
 	batName string
 	out     chan string
 }
 
-// NewBattery returns new instance of battery plugin by given name
-func NewBattery(name string) Battery {
-	return Battery{
+// New returns new instance of battery plugin by given name
+func New(conf *viper.Viper) plugins.Plugin {
+	return battery{
 		out:  make(chan string, 1),
-		conf: setDefaults(viper.Sub("plugins." + name)),
+		conf: conf,
 	}
 }
 
 // Chan returns a strings channel with battery state monitor
-func (b Battery) Chan() chan string {
+func (b battery) Chan() chan string {
 	return b.out
 }
 
 // StartMonitor starts monitoring for battery changing events
-func (b Battery) StartMonitor() {
+func (b battery) StartMonitor() {
 	b.out <- b.formatMessage()
 	conn, err := dbus.SystemBus()
 	if err != nil {
@@ -70,7 +70,7 @@ func (b Battery) StartMonitor() {
 }
 
 // formatMessage formats message for printing
-func (b Battery) formatMessage() string {
+func (b battery) formatMessage() string {
 	lvl, state := b.parseBatLevel()
 
 	var pattern string
@@ -104,7 +104,7 @@ func (b Battery) formatMessage() string {
 //  5: Pending charge
 //  6: Pending discharge
 //
-func (b Battery) parseBatLevel() (int, uint32) {
+func (b battery) parseBatLevel() (int, uint32) {
 	conn, _ := dbus.SystemBus()
 	pth := fmt.Sprintf("/org/freedesktop/UPower/devices/battery_%s", b.conf.GetString("name"))
 	object := conn.Object(
