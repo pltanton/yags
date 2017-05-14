@@ -9,6 +9,9 @@ not overloads disk with useless executions. By the way it is possible to
 configure plugins to implement the conky behavior of execution any command
 with constant pause.
 
+Now it uses brand new golang's plugin system powered by `plugin` package. That
+mean, that this program would only work with go version newer or equal 1.8.
+
 ## Installation
 
 `go get github.com/pltanton/yags`
@@ -25,26 +28,42 @@ yags /path/to/config.yml | dzen2 -x '866' -w '496' -ta 'r'
 
 ## Plugins
 
-_Plugins_ is a subprograms which provides callbacks when related to them action
+_Plugins_ is a go modules which provides callbacks when related to them action
 is appears and provides formatted result of that action to `yags` output. There
 are several implemented plugins:
 
-- [x] battery -- uses upower dbus messages to monitor battery device
-- [x] kbdd -- uses `kbdd` daemon to watch for keyboard layout
-- [x] timer -- conky like plugin to execute any shell command with pause
-- [x] time -- alias for timer, but uses Go library to display current date/time
-- [x] maildir -- monitors _new_ maildir dirrectory changing for new mails
-- [x] volume -- uses alsalib to monitor volume changing and `pamixer` program
-  to fetch an volume and a mute state, would be overwritten with pulselib in
-  future
-- [x] network -- monitors network without networkmanager
+- [x] [battery](https://github.com/pltanton/yags-battery) -- uses upower dbus
+  messages to monitor battery device
+- [x] [kbdd](https://github.com/pltanton/yags-kbdd) -- uses `kbdd` daemon to
+  watch for keyboard layout
+- [x] [timer](https://github.com/pltanton/yags-timer) -- conky like plugin to
+  execute any shell command with pause it includes predefined plugins for
+  **WiFi** and **time** monitoring
+- [x] [maildir](https://github.com/pltanton/yags-maildir) -- monitors _new_
+  maildir dirrectory changing for new mails
+- [x] [volume](https://github.com/pltanton/yags-volume) -- uses alsalib to
+  monitor volume changing and `pamixer` program to fetch an volume and a mute
+  state, would be overwritten with pulselib in future
 - [ ] cpu -- alias for timer for cpu monitoring
 - [ ] ram -- alias for timer for ram monitoring
+
+### How to use
+
+After you download a plugin via `go get` or any other way, you should build it
+as go plugin by `go build -buildmode=plugin` as documented in official golang
+[docpage](https://tip.golang.org/pkg/plugin/). As a result of building you
+should have a binary file ended by `.so` in working directory. Then you should
+pass path to that file by `path` plugin's configuration attribute (you can see
+it in [`config.example.yml`](https://github.com/pltanton/yags/blob/master/config.example.yml)).
+
+### How to implement custom plugin
+
+TBD.
 
 ## Configuration
 
 You can configure `yags` by an any configuration file format, which
-[viper](eat, multi-panel tabbed file manager for Linux desktops. Developed to provide a stable, efficient and highly customizable file manager, some of its features include: in-built VFS, HAL-based device manager, customizable menu system and bash integration.)
+[viper](https://github.com/spf13/viper)
 supports and pass configuration file path as a first argument to `yags`
 command.
 
@@ -62,117 +81,8 @@ At the root of configuration file it few basic configuration fields:
 
 ### Plugins
 
-Each plugin in `plugin` section should contain `type` key to specifi plugin
-type.
+Each plugin in `plugin` section should contain `path` key to specify go's
+plugin path to include.
 
-Some plugin has variables for interpolation and own formats. It acts just lkie
-global `format`, but locally for plugin.
-
-Available plugin types:
-
-#### battery
-
-Displays battery level.
-
-Available configuration keys:
-
-| Key    | Description                 | Default value |
-| ---    | ---                         | ---           |
-| name   | UPower name of battery      | BAT0          |
-| high   | format for _lvl_ > 75       | {lvl}         |
-| medium | format for _lvl_ > 35       | {lvl}         |
-| low    | format for _lvl_ > 12       | {lvl}         |
-| empty  | format for _lvl_ <= 12      | {lvl}         |
-| ac     | format for conneted adapted | {lvl}         |
-
-Available variables for interpolation:
-
-| Variable name | Description               |
-| ---           | ---                       |
-| lvl           | battery level in precents |
-
-#### kbdd
-
-Displays current keyboard layout, using kbdd.
-
-Available configuration keys:
-
-| Key   | Description                                                  | Default value |
-| ---   | ---                                                          | ---           |
-| names | array with layout names (aliaces) in same order as in xinput |               |
-
-#### cmd
-
-Executes a given commanb with `pause` interval.
-
-Available configuration keys:
-
-| Key   | Description                                | Default value |
-| ---   | ---                                        | ---           |
-| pause | interval between command would be executed |               |
-| cmd   | command to execute                         |               |
-
-#### time
-
-Displays time.
-
-Available configuration keys:
-
-| Key        | Description                  | Default value  |
-| ---        | ---                          | ---            |
-| pause      | interval between time update |                |
-| timeFormat | format of time in go style   | Jan 2 15:04:05 |
-
-#### maildir
-
-| Key    | Description                         | Default value |
-| ---    | ---                                 | ---           |
-| dir    | path to maildir                     |               |
-| empty  | format for 0 new messageds          | {new}         |
-| filled | format for not empty new dirrectory | {new}         |
-
-Available variables for interpolation:
-
-| Variable name | Description                    |
-| ---           | ---                            |
-| new           | number of new mails in maildir |
-
-#### volume
-
-Displays current pulse volue, using pulselib.
-
-Available configuration keys:
-
-| Key    | Description            | Default value               |
-| ---    | ---                    | ---                         |
-| sink   | sink to monitor        | /org/pulseaudio/core1/sink0 |
-| high   | format for _vol_ > 66  | {vol}                       |
-| medium | format for _vol_ > 33  | {vol}                       |
-| low    | format for _vol_ <= 33 | {vol}                       |
-| muted  | format for muted sink  | {vol}                       |
-
-Available variables for interpolation:
-
-| Variable name | Description                      |
-| ---           | ---                              |
-| vol           | current volume level in percents |
-
-#### wifi
-
-Displays WiFi signal level.
-
-Available configuration keys:
-
-| Key          | Description                   | Default value |
-| ---          | ---                           | ---           |
-| connected    | format for connected state    | {lvl}         |
-| disconnected | format for disconnected state | N/A           |
-| interface    | interface to monitor          | wlan0         |
-| pause        | interval between updates      | 2000          |
-
-Available variables for interpolation:
-
-| Variable name | Description  |
-| ---           | ---          |
-| lvl           | signal level |
-
+`YAGS` will pass configuration subtree related to `plugin` into plugin, for
+information about configuration plugin in specific plugin page.
