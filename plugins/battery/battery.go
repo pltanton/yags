@@ -22,7 +22,7 @@ type battery struct {
 func New(conf *viper.Viper) plugins.Plugin {
 	return battery{
 		out:  make(chan string, 1),
-		conf: conf,
+		conf: setDefaults(conf),
 	}
 }
 

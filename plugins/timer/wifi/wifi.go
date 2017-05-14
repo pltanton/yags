@@ -1,4 +1,4 @@
-package timer
+package main
 
 import (
 	"bytes"
@@ -8,13 +8,14 @@ import (
 
 	"github.com/spf13/viper"
 
+	"github.com/pltanton/yags/plugins"
+	"github.com/pltanton/yags/plugins/timer/core"
 	"github.com/pltanton/yags/utils"
 )
 
-// NewWifi creates timer with displays a network connection signal
-func NewWifi(name string) Timer {
-	conf := viper.Sub("plugins." + name)
-	setWifiDefaults(conf)
+// New creates timer with displays a network connection signal
+func New(conf *viper.Viper) plugins.Plugin {
+	conf = setDefaults(conf)
 	iface := []byte(conf.GetString("interface"))
 	task := func() string {
 		var format string
@@ -26,9 +27,7 @@ func NewWifi(name string) Timer {
 		}
 		return utils.ReplaceVar(format, "lvl", strconv.FormatFloat(math.Floor(lvl+.5), 'f', 0, 64))
 	}
-	timer := NewTimerFunc(name, task)
-	timer.conf = conf
-	return timer
+	return core.NewTimerFunc(conf, task)
 }
 
 func parseNetwork(iface []byte) float64 {

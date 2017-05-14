@@ -1,7 +1,7 @@
 # vim: ts=2:sw=2
 
 # varSeps: "{}" # default
-format: "{volume} wifi {bat1} time {layout} {gmail}"
+format: "{volume} {wifi} {bat1} {time} {layout} {gmail}"
 plugins:
   volume:
     path: "$GOPATH/src/github.com/pltanton/yags/plugins/volume/volume.so"
@@ -18,19 +18,19 @@ plugins:
     low: " {lvl}%"
     empty: " {lvl}%"
     ac: " {lvl}%"
-  #time:
-    #type: "time"
-    ## timeFormat: "Jan 2 15:04:05" # default
-    ## pause: 1000 # default
+  time:
+    path: "$GOPATH/src/github.com/pltanton/yags/plugins/timer/time/time.so"
+    # timeFormat: "Jan 2 15:04:05" # default
+    # pause: 1000 # default
   layout:
     path: "$GOPATH/src/github.com/pltanton/yags/plugins/kbdd/kbdd.so"
     names: ["en", "ru"]
-  #wifi:
-    #type: "wifi"
-    #connected: " {lvl}%"
-    #disconnected: " N/A"
-    #interface: "wlp4s0"
-    #pause: 2000
+  wifi:
+    path: "$GOPATH/src/github.com/pltanton/yags/plugins/timer/wifi/wifi.so"
+    connected: " {lvl}%"
+    disconnected: " N/A"
+    interface: "wlp4s0"
+    pause: 2000
   gmail:
     path: "$GOPATH/src/github.com/pltanton/yags/plugins/maildir/maildir.so"
     dir: "/home/anton/mail/gmail/INBOX/"

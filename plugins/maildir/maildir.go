@@ -24,7 +24,7 @@ type maildir struct {
 func New(conf *viper.Viper) plugins.Plugin {
 	return maildir{
 		out:  make(chan string, 1),
-		conf: conf,
+		conf: setDefaults(conf),
 	}
 }
 
