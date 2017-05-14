@@ -4,14 +4,14 @@
 format: "{volume} {wifi} {bat1} {time} {layout} {gmail}"
 plugins:
   volume:
-    path: "$GOPATH/src/github.com/pltanton/yags/plugins/volume/volume.so"
+    path: "$GOPATH/src/github.com/pltanton/yags-volume/volume.so"
     sink: "/org/pulseaudio/core1/sink0"
     high: " {vol}%"
     medium: " {vol}%"
     low: " {vol}%"
     muted: " {vol}%"
   bat1:
-    path: "$GOPATH/src/github.com/pltanton/yags/plugins/battery/battery.so"
+    path: "$GOPATH/src/github.com/pltanton/yags-battery/battery.so"
     name: "BAT1"
     high: " {lvl}%"
     medium: " {lvl}%"
@@ -19,20 +19,20 @@ plugins:
     empty: " {lvl}%"
     ac: " {lvl}%"
   time:
-    path: "$GOPATH/src/github.com/pltanton/yags/plugins/timer/time/time.so"
+    path: "$GOPATH/src/github.com/pltanton/yags-timer/time/time.so"
     # timeFormat: "Jan 2 15:04:05" # default
     # pause: 1000 # default
   layout:
-    path: "$GOPATH/src/github.com/pltanton/yags/plugins/kbdd/kbdd.so"
+    path: "$GOPATH/src/github.com/pltanton/yags-kbdd/kbdd.so"
     names: ["en", "ru"]
   wifi:
-    path: "$GOPATH/src/github.com/pltanton/yags/plugins/timer/wifi/wifi.so"
+    path: "$GOPATH/src/github.com/pltanton/yags-timer/wifi/wifi.so"
     connected: " {lvl}%"
     disconnected: " N/A"
     interface: "wlp4s0"
     pause: 2000
   gmail:
-    path: "$GOPATH/src/github.com/pltanton/yags/plugins/maildir/maildir.so"
+    path: "$GOPATH/src/github.com/pltanton/yags-maildir/maildir.so"
     dir: "/home/anton/mail/gmail/INBOX/"
     empty: " {new}"
     filled: " {new}"
